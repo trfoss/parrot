@@ -34,6 +34,9 @@ class KattisHandle(models.Model):
         """
         return KattisScore.objects.filter(kattis_handle=self)
 
+    # def score_difference_week(self):
+
+
 
     def __str__(self):
         return '%s' % self.handle
