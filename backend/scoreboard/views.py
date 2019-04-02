@@ -21,10 +21,10 @@ def scores_week(request):
 	week_ago = datetime.now() - timedelta(days=7)
 	test = datetime.now() - timedelta(days=21) # need a test date that reaches far enough back in our regress.db test data
 	query_result = KattisScore.objects.filter(created_at__gte=test).values('kattis_handle').annotate(points=Max('score') - Min('score'))
-	return JsonResponse(list(query_result), safe=False)
-	# score_diff_list = map(
-	# 	lambda obj:{
-	# 		"username" : obj.kattis_handle,
-	# 		"points" : obj.max - obj.min, 
-	# 	}, query_result)
-	# return JsonResponse(list(score_diff_list), safe=False)
+	# return JsonResponse(list(query_result), safe=False)
+	score_diff_list = map(
+		lambda obj:{
+			"username" : obj['kattis_handle'],
+			"points" : obj['points'], 
+		}, query_result)
+	return JsonResponse(list(score_diff_list), safe=False)
