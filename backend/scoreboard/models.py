@@ -16,11 +16,7 @@ class KattisHandle(models.Model):
     subscribed = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    filter_fields = {
-        'created_at' : ['lte', 'gte'],
-        'score' : ['lte', 'gte'], 
-
-    }
+    
 
     def add_score(self, score):
         """Add a score snapshot for the current Kattis handle
@@ -37,6 +33,7 @@ class KattisHandle(models.Model):
         """Return all the score snapshots for the current kattis handle
         """
         return KattisScore.objects.filter(kattis_handle=self)
+
 
     def __str__(self):
         return '%s' % self.handle
