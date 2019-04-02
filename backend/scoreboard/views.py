@@ -17,20 +17,14 @@ def test(request):
 	return JsonResponse({"test":"test"}, safe=False)
 
 def scores_week(request):
-	# will have to update points to be the difference
-	# week_ago = timezone.timedelta(days = 7) - timezone.now()
+
 	week_ago = datetime.now() - timedelta(days=7)
-	test = datetime.now() - timedelta(days=21)
-	# return JsonResponse({"time": week_ago}, safe=False)
-	# print(week_ago)
-
-	test = KattisScore.objects.values("kattis_handle").annotate(min=Min('score')).annotate(max=Max('score'))
-
-	# scores = map(
+	test = datetime.now() - timedelta(days=21) # need a test date that reaches far enough back in our regress.db test data
+	query_result = KattisScore.objects.filter(created_at__gte=test).values('kattis_handle').annotate(points=Max('score') - Min('score'))
+	return JsonResponse(list(query_result), safe=False)
+	# score_diff_list = map(
 	# 	lambda obj:{
-	# 		"handle" : obj.kattis_handle,
-	# 		"score" : obj.score, 
-	# 		"date" : obj.created_at
-	# 	# }, KattisScore.objects.all().order_by('score').filter(created_at__gte=week_ago))
-	# 	}, KattisScore.objects.values("kattis_handle"))
-	return JsonResponse(list(test), safe=False)
+	# 		"username" : obj.kattis_handle,
+	# 		"points" : obj.max - obj.min, 
+	# 	}, query_result)
+	# return JsonResponse(list(score_diff_list), safe=False)
