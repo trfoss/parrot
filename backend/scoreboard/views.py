@@ -6,9 +6,9 @@ Views for the scoreboard page
 """
 from datetime import datetime, timedelta
 from django.utils.timezone import get_current_timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db.models import Max, Min
-from .models import KattisScore
+from .models import KattisScore, KattisHandle
 
 def get_scores(days):
     """
@@ -56,4 +56,15 @@ def subscribe(request):
     Subscribes a user, allowing for tracking of 
     scores over time.
     """
-    return JsonResponse({"test": 1}, safe=False)
+    username = request.POST.get("username")
+    query_set = KattisHandle.objects.filter(
+        handle = username
+    )
+    if(not len(query_set)):# username not in db
+        return HttpResponse(status=404)
+    try:
+        query_set[0].subscribed = True
+        query_set[0].save()
+        return HttpResponse(status=200) # success
+    except:
+        return HttpResponse(status=400) # unable to subscribe user
