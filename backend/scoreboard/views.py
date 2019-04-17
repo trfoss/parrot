@@ -50,3 +50,10 @@ def scores_month(request):
     for the past month.
     """
     return get_scores(days=30)
+
+def subscribe(request):
+    """
+    Subscribes a user, allowing for tracking of 
+    scores over time.
+    """
+    return JsonResponse({"test": 1}, safe=False)
